@@ -1,6 +1,6 @@
 /* eslint max-len: 0 */
 import webpack from 'webpack';
-import baseConfig from './webpack.config.base';
+import baseConfig from './config.base';
 
 const config = {
   ...baseConfig,

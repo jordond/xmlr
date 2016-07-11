@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import baseConfig from './webpack.config.base';
+import baseConfig from './config.base';
 
 const config = {
   ...baseConfig,

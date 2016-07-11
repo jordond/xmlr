@@ -2,5 +2,6 @@
 {
     "editor.tabSize": 2,
     "editor.renderWhitespace": true,
-    "editor.trimAutoWhitespace": true
+    "editor.trimAutoWhitespace": true,
+    "javascript.validate.enable": false
 }
