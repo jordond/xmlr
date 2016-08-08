@@ -13,7 +13,8 @@
     "import/no-unresolved": [2, { "ignore": ["electron"] }],
     "react/jsx-no-bind": 0,
     "react/prefer-stateless-function": 0,
-    "no-console": 0
+    "no-console": 0,
+    "semi": 0
   },
   "plugins": [
     "import",

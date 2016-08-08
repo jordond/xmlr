@@ -1,3 +1,5 @@
+import { join } from 'path';
+
 import webpack from 'webpack';
 import baseConfig from './config.base';
 
@@ -6,11 +8,11 @@ export default {
 
   devtool: 'source-map',
 
-  entry: ['babel-polyfill', './main.development'],
+  entry: ['babel-polyfill', './src/main'],
 
   output: {
     ...baseConfig.output,
-    path: __dirname,
+    path: join(__dirname, '..', 'dist'),
     filename: './main.js'
   },
 
