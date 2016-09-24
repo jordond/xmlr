@@ -8,7 +8,8 @@ export default class Home extends Component {
     return (
       <div>
         <div className={styles.container}>
-          <h2>Home</h2>
+          <button>Load XMLs</button>
+          <br />
           <Link to="/counter">to Counter</Link>
         </div>
       </div>
