@@ -1,6 +1,6 @@
-import { app } from 'electron';
+import { app } from 'electron'
 
-export function other(mainWindow) {
+function other(mainWindow) {
   return {
     label: '&File',
     submenu: [{
@@ -10,13 +10,13 @@ export function other(mainWindow) {
       label: '&Close',
       accelerator: 'Ctrl+W',
       click() {
-        mainWindow.close();
+        mainWindow.close()
       }
     }]
   }
 }
 
-export const darwin = {
+const darwin = {
   label: 'Electron',
   submenu: [{
     label: 'About ElectronReact',
@@ -45,7 +45,7 @@ export const darwin = {
     label: 'Quit',
     accelerator: 'Command+Q',
     click() {
-      app.quit();
+      app.quit()
     }
   }]
 }

@@ -3,5 +3,6 @@
     "editor.tabSize": 2,
     "editor.renderWhitespace": true,
     "editor.trimAutoWhitespace": true,
-    "javascript.validate.enable": false
+    "javascript.validate.enable": false,
+    "files.trimTrailingWhitespace": true
 }

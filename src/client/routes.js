@@ -1,13 +1,20 @@
-import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import React from 'react'
+import { Route, IndexRoute, Redirect } from 'react-router'
 
-import App from './containers/App';
-import HomePage from './containers/HomePage';
-import CounterPage from './containers/CounterPage';
+import Shell from './shell'
+import XMLPage from './xmls'
 
 export default (
-  <Route path="/" component={App}>
-    <IndexRoute component={HomePage} />
-    <Route path="/counter" component={CounterPage} />
+  <Route path="/" component={Shell}>
+    <IndexRoute component={XMLPage} />
+    <Redirect from="*" to="/" />
   </Route>
-);
+)
+
+// export default (
+//   <Route path="/" component={Shell}>
+//     <IndexRoute component={GithubPage} />
+//     <Route path="clock" component={ClockPage} />
+//     <Redirect from="*" to="/" />
+//   </Route>
+// )

@@ -24,7 +24,7 @@ function other(mainWindow) {
   ]
 }
 
-export function build(mainWindow) {
+function build(mainWindow) {
   if (!mainWindow) {
     throw new Error('Missing mainWindow argument')
   }

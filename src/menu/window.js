@@ -1,4 +1,4 @@
-export const window = {
+const window = {
   label: 'Window',
   submenu: [{
     label: 'Minimize',

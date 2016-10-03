@@ -1,20 +1,23 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { Router, hashHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
+import React from 'react'
+import { render } from 'react-dom'
+import { Router, browserHistory } from 'react-router'
+import { Provider } from 'mobx-react'
 
-import routes from './routes';
-import configureStore from './store/configureStore';
+// Routes
+import routes from './routes'
 
-import './app.global.css';
+// Stores
+// import uiStore from './store'
+import { store as XmlStore } from './xmls'
 
-const store = configureStore();
-const history = syncHistoryWithStore(hashHistory, store);
+const uiStore = { title: "I'm a dummy" }
 
+// Render the application
 render(
-  <Provider store={store}>
-    <Router history={history} routes={routes} />
+  <Provider uiStore={uiStore} xmlStore={new XmlStore()}>
+    <Router history={browserHistory}>
+      {routes}
+    </Router>
   </Provider>,
   document.getElementById('root')
-);
+)
