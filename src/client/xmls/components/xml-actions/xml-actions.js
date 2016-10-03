@@ -6,7 +6,7 @@ import XMLStore from '../../xml.store'
 import styles from './xml-actions.css'
 
 @observer(['xmlStore'])
-class TargetXmlForm extends Component {
+export default class TargetXmlForm extends Component {
 
   static propTypes = {
     xmlStore: XMLStore
@@ -30,6 +30,7 @@ class TargetXmlForm extends Component {
   render() {
     return (
       <div className={styles.test}>
+        <div className="test" />
         <button onClick={this.handleLoad}>Load</button>
         <button onClick={this.handleClear}>Clear</button>
       </div>
@@ -37,5 +38,3 @@ class TargetXmlForm extends Component {
   }
 
 }
-
-export default TargetXmlForm

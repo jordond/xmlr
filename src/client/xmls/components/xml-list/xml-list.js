@@ -6,7 +6,7 @@ import XMLStore from '../../xml.store'
 import styles from './xml-list.css'
 
 @observer(['xmlStore'])
-class XMLList extends Component {
+export default class XMLList extends Component {
 
   static propTypes = {
     xmlStore: XMLStore
@@ -31,5 +31,3 @@ class XMLList extends Component {
   }
 
 }
-
-export default XMLList

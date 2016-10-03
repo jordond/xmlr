@@ -1,20 +1,25 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 
-import XMLStore from '../../xml.store'
-
 import styles from './targetXml.css'
 
 @observer(['xmlStore'])
 class TargetXmlForm extends Component {
 
   static propTypes = {
-    xmlStore: XMLStore
+    xmlStore: React.PropTypes.any.isRequired
   }
+
+  constructor() {
+    super()
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+  test = 5
 
   handleClick() {
     console.log('Button was clicked', this)
-    this.props.xmlStore.target.filepath += '1'
+    this.props.xmlStore.selectTarget()
   }
 
   render() {

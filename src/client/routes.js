@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, IndexRoute, Redirect } from 'react-router'
 
 import Shell from './shell'
-import XMLPage from './xmls'
+import { XMLPage } from './xmls'
 
 export default (
   <Route path="/" component={Shell}>

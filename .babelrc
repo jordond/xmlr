@@ -1,6 +1,11 @@
 {
-  "presets": ["latest", "react"],
-  "plugins": ["transform-decorators-legacy", "add-module-exports", "transform-object-rest-spread", "transform-class-properties"],
+  "presets": ["latest", "react", "stage-1", "stage-3"],
+  "plugins": [
+    "transform-decorators-legacy",
+    "add-module-exports",
+    "transform-object-rest-spread",
+    "transform-class-properties"
+  ],
   "env": {
     "production": {
       "presets": ["react-optimize"],

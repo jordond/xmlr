@@ -6,19 +6,20 @@ class XMLStore {
   @observable loading = false
   @observable error = null
   @observable list = []
-  @observable target = null
+  @observable target = {}
+  @observable test = {}
 
   constructor() {
     autorun(() => {
       // TODO implement, for now just console.log
       // this.bridge.selectedXmlChanged(this.selected)
-      console.log(`Selected Item has changed -> ${this.selected.id}`, this.selected)
+      console.log(`Selected Item has changed -> ${this.target}`)
     })
   }
 
   @computed
   get selected() {
-    return this.loadedXmls.find(x => x.isSelected)
+    return this.list.find(x => x.isSelected) || {}
   }
 
   @action
@@ -28,7 +29,7 @@ class XMLStore {
     try {
       // TODO Implement file dialog, spooooofing for now
       // const targetFilePath = await this.bridge.chooseTargetXml()
-      const targetFilePath = '/Users/jdhoog.ALPHA/flash/fdmb_tim_hortons/SampleXML.xml'
+      const targetFilePath = `/Users/jdhoog.ALPHA/flash/fdmb_tim_hortons/SampleXML ${Math.random()}.xml`
       this.target = new XMLModel(this, targetFilePath, true, false)
       this.resetLoading()
     } catch (error) {

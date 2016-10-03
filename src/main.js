@@ -22,9 +22,7 @@ async function installExtensions() {
   if (process.env.NODE_ENV === 'development') {
     const installer = require('electron-devtools-installer') // eslint-disable-line global-require
 
-    const extensions = [
-      'REACT_DEVELOPER_TOOLS'
-    ]
+    const extensions = ['REACT_DEVELOPER_TOOLS', 'REACT_PERF']
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
     for (const name of extensions) {
       try {
@@ -39,6 +37,7 @@ async function onReady() {
 
   mainWindow = new BrowserWindow({ show: false, WIDTH, HEIGHT })
   mainWindow.loadURL(`file://${HTML_PATH}`)
+  console.log(HTML_PATH)
 
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show()

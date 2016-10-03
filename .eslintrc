@@ -22,10 +22,12 @@
     "semi": [2, "never"],
     "linebreak-style": 0,
     "import/no-extraneous-dependencies": 0,
+    "import/extensions": 0,
     "react/jsx-filename-extension": 0,
     "react/forbid-prop-types": 0,
     "class-methods-use-this": [2, { "exceptMethods": ["render"] }],
-    "max-len": [0, { "ignoreComments": true, "ignoreStrings": true }]
+    "max-len": [0, { "ignoreComments": true, "ignoreStrings": true }],
+    "jsx-a11y/no-static-element-interactions": 0
   },
   "plugins": [
     "babel",
