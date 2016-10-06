@@ -1,3 +1,7 @@
-.test {
-  color: blue;
+.inputGroup {
+  display: block;
+}
+
+.inputGroup.button {
+  padding-right: 5rem;
 }

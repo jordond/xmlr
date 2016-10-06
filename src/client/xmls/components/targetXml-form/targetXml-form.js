@@ -15,20 +15,19 @@ class TargetXmlForm extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
 
-  test = 5
-
   handleClick() {
-    console.log('Button was clicked', this)
     this.props.xmlStore.selectTarget()
   }
 
   render() {
     const { target } = this.props.xmlStore
     return (
-      <div className={styles.test}>
+      <div className="TargetXMLForm">
         Target:
-        <button onClick={this.handleClick}>Select</button>
-        <span>{target ? target.displayName : 'No target chosen' }</span>
+        <div className={styles.inputGroup}>
+          <button onClick={this.handleClick}>Select</button>
+          <span>{target ? target.displayName : 'No target chosen' }</span>
+        </div>
       </div>
     )
   }

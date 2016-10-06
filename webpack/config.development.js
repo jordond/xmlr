@@ -11,7 +11,7 @@ const config = {
 
   entry: [
     'babel-polyfill',
-    'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr',
+    'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr&reload=true',
     './src/client/index.js'
   ],
 

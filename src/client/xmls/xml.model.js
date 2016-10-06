@@ -7,8 +7,8 @@ class XMLModel {
   store
   id
   @observable filepath
-  @observable isTarget
-  @observable isSelected
+  @observable isTarget = false
+  @observable isSelected = false
 
   constructor(store, filepath, target = false, selected = false) {
     this.id = v4()
@@ -18,9 +18,9 @@ class XMLModel {
     this.selected = selected
   }
 
-  @action
-  setSelected(selected = false) {
-    this.isSelected = selected
+  @computed
+  get parentFolder() {
+    return dirname(this.filepath)
   }
 
   @computed
@@ -28,10 +28,15 @@ class XMLModel {
     if (this.isTarget) {
       // Return the parent folder instead of xml name, as it is probably menuboardv2.xml
       // TODO display the folder name?
-      return dirname(this.filepath)
+      return this.parentFolder
     }
     // TODO removing the common name ex Project1 AP.xml, Project1 No Coffee.xml => AP.xml, No Coffee.xml
     return basename(this.filepath, '.xml')
+  }
+
+  @action
+  setSelected() {
+    this.store.setSelected(this.toJS())
   }
 
   destroy() {

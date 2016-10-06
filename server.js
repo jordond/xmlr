@@ -27,14 +27,21 @@ const server = app.listen(PORT, 'localhost', (err) => {
     console.error(err)
     return
   }
-
   console.log(`Listening at http://localhost:${PORT}`)
 })
 
-process.on('SIGTERM', () => {
-  console.log('Stopping dev server')
-  wdm.close()
-  server.close(() => {
+let ran = false
+const gracefulExit = () => {
+  if (!ran) {
+    console.log('Stopping dev server')
+    wdm.close()
+    server.close(() => {
+      process.exit(0)
+    })
+    ran = true
     process.exit(0)
-  })
-})
+  }
+}
+
+process.on('SIGTERM', gracefulExit)
+process.on('exit', gracefulExit)

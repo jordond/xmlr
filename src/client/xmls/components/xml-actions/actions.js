@@ -1,36 +1,33 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 
-import XMLStore from '../../xml.store'
-
-import styles from './xml-actions.css'
+import styles from './actions.css'
 
 @observer(['xmlStore'])
 export default class TargetXmlForm extends Component {
 
   static propTypes = {
-    xmlStore: XMLStore
+    xmlStore: React.PropTypes.any.isRequired
   }
 
   constructor() {
     super()
-    this.store = this.props.xmlStore
+    this.handleLoad = this.handleLoad.bind(this)
+    this.handleClear = this.handleClear.bind(this)
   }
 
   handleLoad() {
-    console.log('HandleLoad')
-    this.store.loadXmls()
+    this.props.xmlStore.loadXmls()
   }
 
   handleClear() {
-    console.log('Handleclear', this)
-    this.store.clear()
+    this.props.xmlStore.clear()
   }
 
   render() {
     return (
       <div className={styles.test}>
-        <div className="test" />
+        <div />
         <button onClick={this.handleLoad}>Load</button>
         <button onClick={this.handleClear}>Clear</button>
       </div>
