@@ -21,7 +21,7 @@ class XMLStore {
       }
     })
 
-    autorun(() => console.log('Item selected -> ', this.selected))
+    autorun(() => console.log('Item selected -> ', this.selected.id))
   }
 
   @computed
@@ -51,18 +51,20 @@ class XMLStore {
   async loadXmls() {
     this.loading = true
     try {
-      let filenames = await selectMultipleXMLs()
+      const filenames = await selectMultipleXMLs()
       if (filenames) {
-        filenames = filenames.sort().reverse()
-        const uniqueFiles = filenames.filter(x => this.existingFilepaths.indexOf(x) === -1)
-        this.existingFilepaths = [...uniqueFiles]
-        console.log('files to use', uniqueFiles)
-        console.log('existing files', this.existingFilepaths)
+        const uniqueFiles = filenames
+          .filter(x => !this.existingFilepaths.includes(x))
+          .sort((l, r) => l.length - r.length)
 
-        // Create the Xml models
-        const prefix = findPrefix(uniqueFiles)
-        const xmls = uniqueFiles.map(x => new XMLModel(this, x, { prefix }))
-        this.list.push(...xmls)
+        if (uniqueFiles.length > 0) {
+          this.existingFilepaths.push(...uniqueFiles)
+
+          // Create the Xml models
+          const prefix = findPrefix(uniqueFiles)
+          const xmls = uniqueFiles.map(x => new XMLModel(this, x, { prefix }))
+          this.list.push(...xmls)
+        }
       }
       this.loading = false
     } catch (error) {
@@ -79,6 +81,7 @@ class XMLStore {
   @action
   clear() {
     this.list = []
+    this.existingFilepaths = []
   }
 
   @action

@@ -31,13 +31,13 @@ class XMLModel {
       return this.parentFolder
     }
 
-
-
     const basePath = cleanUnderscoresAndTrim(basename(this.filepath, '.xml'))
     const prefix = cleanUnderscoresAndTrim(this.prefix)
-
-    const lastWord = getLastWord(prefix)
-    return `${lastWord} ${basePath.replace(prefix, '')}`
+    if (prefix) {
+      const lastWord = getLastWord(prefix)
+      return `${lastWord} ${basePath.replace(prefix, '')}`
+    }
+    return basePath
   }
 
   @action

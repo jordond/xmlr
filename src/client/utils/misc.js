@@ -34,7 +34,7 @@ export function getLastWord(string, checkForNumberPrefix = true) {
  * @returns String - Common prefix from the strings
  */
 export function findPrefix(strings = []) {
-  if (strings.length === 0) {
+  if (strings.length <= 1) {
     return ''
   }
   let largest = strings[0]
