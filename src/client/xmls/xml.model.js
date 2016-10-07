@@ -1,37 +1,43 @@
-import { basename, dirname } from 'path'
-
+import { basename } from 'path'
 import { observable, action, computed } from 'mobx'
 import { v4 } from 'node-uuid'
 
+import { splitPath, cleanUnderscoresAndTrim, getLastWord } from '../utils/misc'
+
 class XMLModel {
-  store
-  id
   @observable filepath
   @observable isTarget = false
   @observable isSelected = false
+  prefix = ''
+  store
+  id
 
-  constructor(store, filepath, target = false, selected = false) {
+  constructor(store, filepath, { target = false, prefix = '' }) {
     this.id = v4()
     this.store = store
     this.filepath = filepath
     this.isTarget = target
-    this.selected = selected
+    this.prefix = splitPath(prefix, 0)
   }
 
   @computed
   get parentFolder() {
-    return dirname(this.filepath)
+    return splitPath(this.filepath, 2)
   }
 
   @computed
   get displayName() {
     if (this.isTarget) {
-      // Return the parent folder instead of xml name, as it is probably menuboardv2.xml
-      // TODO display the folder name?
       return this.parentFolder
     }
-    // TODO removing the common name ex Project1 AP.xml, Project1 No Coffee.xml => AP.xml, No Coffee.xml
-    return basename(this.filepath, '.xml')
+
+
+
+    const basePath = cleanUnderscoresAndTrim(basename(this.filepath, '.xml'))
+    const prefix = cleanUnderscoresAndTrim(this.prefix)
+
+    const lastWord = getLastWord(prefix)
+    return `${lastWord} ${basePath.replace(prefix, '')}`
   }
 
   @action
@@ -40,7 +46,7 @@ class XMLModel {
   }
 
   destroy() {
-    this.store.loadedXmls.remove(this)
+    this.store.list.remove(this)
   }
 
   toJS() {
@@ -48,7 +54,8 @@ class XMLModel {
       id: this.id,
       filepath: this.filepath,
       isTarget: this.isTarget,
-      isSelected: this.isSelected
+      isSelected: this.isSelected,
+      prefix: this.prefix
     }
   }
 

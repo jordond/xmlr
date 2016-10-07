@@ -7,7 +7,7 @@ const config = {
 
   debug: true,
 
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval-source-map',
 
   entry: [
     'babel-polyfill',

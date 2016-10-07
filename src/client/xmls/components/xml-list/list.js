@@ -1,14 +1,29 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { inject, observer } from 'mobx-react'
 
 import ListItem from './list-item'
 
-function List(props) {
-  return <ul>{ props.store.list.map(item => <ListItem key={item.id} item={item} />) }</ul>
+function List({ xmlStore: { list } }) {
+  let prefix = ''
+  return (
+    <ul>
+      {
+        list.map((item) => {
+          const elements = []
+          if (item.prefix !== prefix) {
+            elements.push(<span>{item.prefix}</span>)
+            prefix = item.prefix
+          }
+          elements.push(<ListItem key={item.id} item={item} />)
+          return elements
+        })
+      }
+    </ul>
+  )
 }
 
 List.propTypes = {
-  store: React.PropTypes.object.isRequired,
+  xmlStore: React.PropTypes.object.isRequired,
 }
 
-export default observer(List)
+export default inject('xmlStore')(observer(List))

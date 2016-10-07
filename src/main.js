@@ -1,7 +1,9 @@
 import { resolve } from 'path'
 import { app, BrowserWindow, Menu } from 'electron'
+import windowState from 'electron-window-state'
 
 import menuHelper from './menu'
+import registerFileOpenEvents from './files/open'
 
 const HTML_PATH = resolve(__dirname, '..', 'src/client/app.html')
 const WIDTH = 1024
@@ -34,10 +36,14 @@ async function installExtensions() {
 async function onReady() {
   await installExtensions()
 
-  mainWindow = new BrowserWindow({ show: false, WIDTH, HEIGHT })
+  const mainWindowState = windowState({ defaultWidth: WIDTH, defaultHeight: HEIGHT })
+  const { x, y, width, height } = mainWindowState
+
+  mainWindow = new BrowserWindow({ show: false, x, y, width, height })
   mainWindow.loadURL(`file://${HTML_PATH}`)
   console.log(HTML_PATH)
 
+  registerFileOpenEvents()
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show()
     mainWindow.focus()
@@ -48,12 +54,18 @@ async function onReady() {
   if (process.env.NODE_ENV === 'development') {
     mainWindow.openDevTools()
     mainWindow.webContents.on('context-menu', (e, props) => {
-      const { x, y } = props
+      const { x: menuX, y: menuY } = props
 
       Menu.buildFromTemplate([{
         label: 'Inspect element',
         click() {
-          mainWindow.inspectElement(x, y)
+          mainWindow.inspectElement(menuX, menuY)
+        }
+      }, {
+        label: 'Relaunch App',
+        click() {
+          app.relaunch()
+          app.exit(0)
         }
       }]).popup(mainWindow)
     })
@@ -62,6 +74,9 @@ async function onReady() {
   const template = menuHelper.build(mainWindow)
   menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
+
+  // Manage window state
+  mainWindowState.manage(mainWindow)
 }
 
 app.on('ready', onReady)

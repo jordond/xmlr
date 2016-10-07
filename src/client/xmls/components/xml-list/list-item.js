@@ -1,11 +1,11 @@
 import React from 'react'
 import { observer, PropTypes } from 'mobx-react'
 
-import styles from './list.css'
+import styles from './list-item.css'
 
 function ListItem({ item }) {
   return (
-    <li className={item.isSelected ? styles.test : {}} onClick={item.setSelected}>
+    <li className={item.isSelected ? styles.test : {}} onClick={() => item.setSelected()}>
       {item.displayName}
     </li>
   )

@@ -1,13 +1,16 @@
 import { action, observable, computed, autorun } from 'mobx'
 
+import { findPrefix } from '../utils/misc'
 import XMLModel from './xml.model'
+import { selectTargetXml, selectMultipleXMLs } from './xml.service'
 
 class XMLStore {
   @observable loading = false
-  @observable error = null
+  @observable error = {}
   @observable list = []
   @observable target = null
   @observable test = {}
+  existingFilepaths = []
 
   constructor() {
     autorun(() => {
@@ -27,17 +30,16 @@ class XMLStore {
   }
 
   @action
-  selectTarget() {
+  async selectTarget() {
     this.loading = true
-
     try {
-      // TODO Implement file dialog, spooooofing for now
-      // const targetFilePath = await this.bridge.chooseTargetXml()
-      const targetFilePath = `/Users/jdhoog.ALPHA/flash/fdmb_tim_hortons/SampleXML-${Math.random()}.xml`
-      if (this.target) {
-        this.target.filepath = targetFilePath
-      } else {
-        this.target = new XMLModel(this, targetFilePath, true, false)
+      const results = await selectTargetXml()
+      if (results && results[0]) {
+        if (this.target) {
+          this.target.filepath = results[0]
+        } else {
+          this.target = new XMLModel(this, results[0], { target: true })
+        }
       }
       this.resetLoading()
     } catch (error) {
@@ -48,23 +50,24 @@ class XMLStore {
   @action
   async loadXmls() {
     this.loading = true
-
     try {
-      // TODO implement xml choosing
-      // const filenames = await this.bridge.chooseXmls()
-      const filenames = [
-        `/Users/jdhoog.ALPHA/flash/Bakery Port/Bakery AP ${Math.random()}.xml`,
-        `/Users/jdhoog.ALPHA/flash/Bakery Port/Bakery No Cookies.xml ${Math.random()}`,
-        `/Users/jdhoog.ALPHA/flash/Bakery Port/Bakery No Donuts ${Math.random()}.xml`
-      ]
-
+      let filenames = await selectMultipleXMLs()
       if (filenames) {
-        const xmls = filenames.map(x => new XMLModel(this, x, false, false))
-        this.list = this.list.concat(xmls)
+        filenames = filenames.sort().reverse()
+        const uniqueFiles = filenames.filter(x => this.existingFilepaths.indexOf(x) === -1)
+        this.existingFilepaths = [...uniqueFiles]
+        console.log('files to use', uniqueFiles)
+        console.log('existing files', this.existingFilepaths)
+
+        // Create the Xml models
+        const prefix = findPrefix(uniqueFiles)
+        const xmls = uniqueFiles.map(x => new XMLModel(this, x, { prefix }))
+        this.list.push(...xmls)
       }
+      this.loading = false
     } catch (error) {
-      this.list.clear()
       this.resetLoading(error)
+      console.error('loadXmls failed', error)
     }
   }
 
