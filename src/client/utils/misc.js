@@ -14,18 +14,13 @@ export function cleanUnderscoresAndTrim(string) {
   return string.replace(/_/g, ' ').trim()
 }
 
-export function getWordFromEnd(string, offset) {
-  return string.slice(string.lastIndexOf(' ') - offset)
-}
-
 export function getLastWord(string, checkForNumberPrefix = true) {
-  if (!checkForNumberPrefix) {
-    return getWordFromEnd(string, 1)
-  }
-
   const words = string.split(' ')
-  const offset = isNaN(words[words.length - 2]) ? 1 : 2
-  return getWordFromEnd(string, offset)
+  let offset = isNaN(words[words.length - 2]) ? 1 : 2
+  if (!checkForNumberPrefix) {
+    offset = 1
+  }
+  return words.slice(words.length - offset, words.length).join(' ')
 }
 
 /**

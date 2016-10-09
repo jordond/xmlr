@@ -29,6 +29,11 @@ class XMLStore {
     return this.list.find(x => x.isSelected) || {}
   }
 
+  // @computed
+  // function toMap() {
+  //   const prefixes = Array.from(this.list, )
+  // }
+
   @action
   async selectTarget() {
     this.loading = true
@@ -61,8 +66,10 @@ class XMLStore {
           this.existingFilepaths.push(...uniqueFiles)
 
           // Create the Xml models
-          const prefix = findPrefix(uniqueFiles)
+          const prefix = findPrefix(this.existingFilepaths)
           const xmls = uniqueFiles.map(x => new XMLModel(this, x, { prefix }))
+
+          // TODO change array to be [ { root: 'path/to/xmls', files: [] }]
           this.list.push(...xmls)
         }
       }
@@ -80,7 +87,7 @@ class XMLStore {
 
   @action
   clear() {
-    this.list = []
+    this.list.clear()
     this.existingFilepaths = []
   }
 

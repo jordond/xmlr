@@ -11,7 +11,7 @@ function List({ xmlStore: { list } }) {
         list.map((item) => {
           const elements = []
           if (item.prefix !== prefix) {
-            elements.push(<span>{item.prefix}</span>)
+            elements.push(<span>{item.filepath}</span>)
             prefix = item.prefix
           }
           elements.push(<ListItem key={item.id} item={item} />)
