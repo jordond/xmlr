@@ -1,30 +1,38 @@
 import { ipcRenderer } from 'electron'
 
-export function sendMessage(action, args, waitForResponse = true, timeout = 0) {
+import createLogger from './logger'
+
+const TAG = 'IPC'
+
+export function sendMessage(action, args, { wait = true, response, timeout = 0 } = {}) {
+  const log = createLogger(TAG)
   const promise = new Promise((resolve, reject) => {
     if (!action) {
       return reject('Send: No action was supplied')
     }
 
-    console.log(`Sending ${action}`)
+    log.info(`Sending ${action}`)
     ipcRenderer.send(action, args)
-    if (!waitForResponse) {
+    if (!wait) {
       return resolve()
     }
-    resolve(recieveMessage(`${action}:response`, timeout))
+    const responseAction = response || `${action}:response`
+    log.debug(`Listening for "${responseAction}"`)
+    resolve(recieveMessage(responseAction, timeout))
   })
 
   return promise
 }
 
 export function recieveMessage(event, timeout = 0) {
+  const log = createLogger(TAG)
   const promise = new Promise((resolve, reject) => {
     if (!event) {
       return reject('Recieve: No event was supplied')
     }
 
     const handler = (result, args) => {
-      console.log('Message Received', args)
+      log.verbose(`[${event}] Message Received`, args)
       return resolve(args)
     }
 
@@ -32,7 +40,7 @@ export function recieveMessage(event, timeout = 0) {
     if (timeout > 0) {
       setTimeout(() => {
         ipcRenderer.removeListener(event, handler)
-        return reject('Message timed out')
+        return reject(`[${event}] Message response timed out`)
       }, timeout)
     }
   })

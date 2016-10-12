@@ -31,6 +31,7 @@ const server = app.listen(PORT, 'localhost', (err) => {
 })
 
 let ran = false
+
 const gracefulExit = () => {
   if (!ran) {
     console.log('Stopping dev server')

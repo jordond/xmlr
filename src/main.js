@@ -1,18 +1,21 @@
 import { resolve } from 'path'
-import { app, BrowserWindow, Menu } from 'electron'
+
+import { app, BrowserWindow, Menu, ipcMain } from 'electron'
 import windowState from 'electron-window-state'
 
+import { initIpc, LOG_REGISTER, LOG_OPTIONS } from './logger'
 import menuHelper from './menu'
 import registerFileOpenEvents from './files/open'
 
 const HTML_PATH = resolve(__dirname, '..', 'src/client/app.html')
 const WIDTH = 1024
 const HEIGHT = 728
+const isDevelop = process.env.NODE_ENV === 'development'
 
 let menu
 let mainWindow = null
 
-if (process.env.NODE_ENV === 'development') {
+if (isDevelop) {
   require('electron-debug')() // eslint-disable-line global-require
 }
 
@@ -21,7 +24,7 @@ app.on('window-all-closed', () => {
 })
 
 async function installExtensions() {
-  if (process.env.NODE_ENV === 'development') {
+  if (isDevelop) {
     const installer = require('electron-devtools-installer') // eslint-disable-line global-require
     const extensions = ['REACT_DEVELOPER_TOOLS', 'REACT_PERF']
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
@@ -43,15 +46,28 @@ async function onReady() {
   mainWindow.loadURL(`file://${HTML_PATH}`)
   console.log(HTML_PATH)
 
-  registerFileOpenEvents()
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show()
     mainWindow.focus()
   })
 
+  const loggerOptions = {
+    level: process.env.LOG_LEVEL || isDevelop ? 'DEBUG' : 'INFO',
+    short: !isDevelop
+  }
+  ipcMain.on(LOG_REGISTER, (event) => {
+    log.debug('Sending logger options to render process')
+    event.sender.send(LOG_OPTIONS, loggerOptions)
+  })
+
+  const log = initIpc(mainWindow.webContents, 'Main', loggerOptions)
+  log.debug('Initialized the logger', loggerOptions)
+
+  registerFileOpenEvents()
+
   mainWindow.on('closed', () => (mainWindow = null))
 
-  if (process.env.NODE_ENV === 'development') {
+  if (isDevelop) {
     mainWindow.openDevTools()
     mainWindow.webContents.on('context-menu', (e, props) => {
       const { x: menuX, y: menuY } = props
