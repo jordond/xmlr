@@ -2,22 +2,20 @@ import { basename } from 'path'
 import { observable, action, computed } from 'mobx'
 import { v4 } from 'node-uuid'
 
-import { splitPath, cleanUnderscoresAndTrim, getLastWord } from '../utils/misc'
+import { splitPath, cleanUnderscoresAndTrim } from '../utils/misc'
 
 class XMLModel {
   @observable filepath
   @observable isTarget = false
-  @observable isSelected = false
-  prefix = ''
+  @observable selected = false
   store
   id
 
-  constructor(store, filepath, { target = false, prefix = '' }) {
+  constructor(store, filepath, { target = false } = {}) {
     this.id = v4()
     this.store = store
     this.filepath = filepath
     this.isTarget = target
-    this.prefix = splitPath(prefix, 0)
   }
 
   @computed
@@ -31,13 +29,7 @@ class XMLModel {
       return this.parentFolder
     }
 
-    const basePath = cleanUnderscoresAndTrim(basename(this.filepath, '.xml'))
-    const prefix = cleanUnderscoresAndTrim(this.prefix)
-    if (prefix) {
-      const lastWord = getLastWord(prefix)
-      return `${lastWord} ${basePath.replace(prefix, '')}`
-    }
-    return basePath
+    return cleanUnderscoresAndTrim(basename(this.filepath, '.xml'))
   }
 
   @action
@@ -54,13 +46,12 @@ class XMLModel {
       id: this.id,
       filepath: this.filepath,
       isTarget: this.isTarget,
-      isSelected: this.isSelected,
-      prefix: this.prefix
+      selected: this.selected
     }
   }
 
-  static fromJS(store, { filepath, target = false, selected = false }) {
-    return new XMLModel(store, filepath, target, selected)
+  static fromJS(store, { filepath, target = false }) {
+    return new XMLModel(store, filepath, { target })
   }
 }
 

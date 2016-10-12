@@ -1,8 +1,10 @@
+import { dirname } from 'path'
 import { action, observable, computed, autorun } from 'mobx'
 
-import { findPrefix } from '../utils/misc'
+import flatten from '../utils/array'
+
 import XMLModel from './xml.model'
-import { selectTargetXml, selectMultipleXMLs } from './xml.service'
+import { selectTargetXml, selectMultipleXMLs, selectXMLFolder } from './xml.service'
 
 class XMLStore {
   @observable loading = false
@@ -24,15 +26,18 @@ class XMLStore {
     autorun(() => console.log('Item selected -> ', this.selected.id))
   }
 
-  @computed
-  get selected() {
-    return this.list.find(x => x.isSelected) || {}
+  listAll() {
+    if (this.list.length === 0) {
+      return []
+    }
+    const list = this.list.map(x => x.files)
+    return flatten(list)
   }
 
-  // @computed
-  // function toMap() {
-  //   const prefixes = Array.from(this.list, )
-  // }
+  @computed
+  get selected() {
+    return this.listAll().find(x => x.selected) || {}
+  }
 
   @action
   async selectTarget() {
@@ -52,37 +57,58 @@ class XMLStore {
     }
   }
 
-  @action
-  async loadXmls() {
+  async loadFiles() {
     this.loading = true
     try {
       const filenames = await selectMultipleXMLs()
-      if (filenames) {
-        const uniqueFiles = filenames
-          .filter(x => !this.existingFilepaths.includes(x))
-          .sort((l, r) => l.length - r.length)
+      this.loadXmls(filenames)
+      this.loading = false
+    } catch (error) {
+      this.resetLoading(error)
+      console.error('loadfiles failed', error)
+    }
+  }
 
-        if (uniqueFiles.length > 0) {
-          this.existingFilepaths.push(...uniqueFiles)
-
-          // Create the Xml models
-          const prefix = findPrefix(this.existingFilepaths)
-          const xmls = uniqueFiles.map(x => new XMLModel(this, x, { prefix }))
-
-          // TODO change array to be [ { root: 'path/to/xmls', files: [] }]
-          this.list.push(...xmls)
-        }
+  async loadFolder() {
+    this.loading = true
+    try {
+      const folderList = await selectXMLFolder()
+      for (const filenames of folderList) {
+        this.loadXmls(filenames)
       }
       this.loading = false
     } catch (error) {
       this.resetLoading(error)
-      console.error('loadXmls failed', error)
+      console.error('loadFolder failed', error)
+    }
+  }
+
+  @action
+  loadXmls(filenames = []) {
+    if (filenames && filenames.length > 0) {
+      const uniqueFiles = filenames
+        .filter(x => !this.existingFilepaths.includes(x))
+        .sort((l, r) => l.length - r.length)
+
+      if (uniqueFiles.length > 0) {
+        this.existingFilepaths.push(...uniqueFiles)
+
+        // Create the Xml models
+        const xmls = uniqueFiles.map(x => new XMLModel(this, x))
+
+        const existingIndex = this.list.findIndex(x => x.root === dirname(uniqueFiles[0]))
+        if (existingIndex === -1) {
+          this.list.push({ root: dirname(uniqueFiles[0]), files: xmls })
+        } else {
+          this.list[existingIndex].files.push(...xmls)
+        }
+      }
     }
   }
 
   @action
   setSelected(item) {
-    this.list.forEach(x => (x.isSelected = item.id === x.id))
+    this.listAll().forEach(x => (x.selected = item.id === x.id))
   }
 
   @action

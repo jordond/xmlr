@@ -4,18 +4,13 @@ import { inject, observer } from 'mobx-react'
 import ListItem from './list-item'
 
 function List({ xmlStore: { list } }) {
-  let prefix = ''
   return (
     <ul>
       {
         list.map((item) => {
-          const elements = []
-          if (item.prefix !== prefix) {
-            elements.push(<span>{item.filepath}</span>)
-            prefix = item.prefix
-          }
-          elements.push(<ListItem key={item.id} item={item} />)
-          return elements
+          const folder = <span>{item.root}</span>
+          const fileItems = item.files.map(file => <ListItem key={file.id} item={file} />)
+          return [folder, ...fileItems]
         })
       }
     </ul>

@@ -12,12 +12,17 @@ export default class TargetXmlForm extends Component {
 
   constructor() {
     super()
-    this.handleLoad = this.handleLoad.bind(this)
+    this.handleLoadFiles = this.handleLoadFiles.bind(this)
+    this.handleLoadFolder = this.handleLoadFolder.bind(this)
     this.handleClear = this.handleClear.bind(this)
   }
 
-  handleLoad() {
-    this.props.xmlStore.loadXmls()
+  handleLoadFiles() {
+    this.props.xmlStore.loadFiles()
+  }
+
+  handleLoadFolder() {
+    this.props.xmlStore.loadFolder()
   }
 
   handleClear() {
@@ -25,11 +30,13 @@ export default class TargetXmlForm extends Component {
   }
 
   render() {
+    const { loading } = this.props.xmlStore
     return (
       <div className={styles.test}>
         <div />
-        <button onClick={this.handleLoad}>Load</button>
-        <button onClick={this.handleClear}>Clear</button>
+        <button onClick={this.handleLoadFiles} disabled={loading}>Load Files</button>
+        <button onClick={this.handleLoadFolder} disabled={loading}>Load Folder</button>
+        <button onClick={this.handleClear} disabled={loading}>Clear</button>
       </div>
     )
   }

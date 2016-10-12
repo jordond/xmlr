@@ -23,3 +23,12 @@ export function selectMultipleXMLs() {
   }
   return sendMessage(Events.ACTION_OPEN_FILE, options)
 }
+
+export function selectXMLFolder() {
+  const options = {
+    ...defaultOptions,
+    title: 'Select a folder of XMLs',
+    folder: true
+  }
+  return sendMessage(Events.ACTION_OPEN_FOLDER, options)
+}

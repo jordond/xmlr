@@ -5,7 +5,7 @@ import styles from './list-item.css'
 
 function ListItem({ item }) {
   return (
-    <li className={item.isSelected ? styles.test : {}} onClick={() => item.setSelected()}>
+    <li className={item.selected ? styles.test : {}} onClick={() => item.setSelected()}>
       {item.displayName}
     </li>
   )
