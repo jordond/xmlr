@@ -3,9 +3,11 @@ import { resolve } from 'path'
 import { app, BrowserWindow, Menu, ipcMain } from 'electron'
 import windowState from 'electron-window-state'
 
-import { initIpc, LOG_REGISTER, LOG_OPTIONS } from './logger'
+import { LOG_REGISTER, LOG_OPTIONS } from './events'
+import { initIpc } from './logger'
 import menuHelper from './menu'
 import registerFileOpenEvents from './files/open'
+import registerXmlSwitcherEvents from './files/switcher'
 
 const HTML_PATH = resolve(__dirname, '..', 'src/client/app.html')
 const WIDTH = 1024
@@ -63,7 +65,10 @@ async function onReady() {
   const log = initIpc(mainWindow.webContents, 'Main', loggerOptions)
   log.debug('Initialized the logger', loggerOptions)
 
+  // Register all events
+  // TODO add helper to do this, rename all functions to register()
   registerFileOpenEvents()
+  registerXmlSwitcherEvents()
 
   mainWindow.on('closed', () => (mainWindow = null))
 

@@ -97,6 +97,7 @@
     "electron-debug": "^1.0.1",
     "electron-window-state": "^3.0.4",
     "font-awesome": "^4.6.3",
+    "fs-extra": "^0.30.0",
     "mobx": "^2.5.2",
     "mobx-react": "^3.5.7",
     "moment": "^2.15.1",

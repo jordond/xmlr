@@ -30,12 +30,13 @@ export default class TargetXmlForm extends Component {
   }
 
   render() {
-    const { loading } = this.props.xmlStore
+    const { loading, target } = this.props.xmlStore
+    const disabled = loading || !target
     return (
       <div className={styles.test}>
         <div />
-        <button onClick={this.handleLoadFiles} disabled={loading}>Load Files</button>
-        <button onClick={this.handleLoadFolder} disabled={loading}>Load Folder</button>
+        <button onClick={this.handleLoadFiles} disabled={disabled}>Load Files</button>
+        <button onClick={this.handleLoadFolder} disabled={disabled}>Load Folder</button>
         <button onClick={this.handleClear} disabled={loading}>Clear</button>
       </div>
     )

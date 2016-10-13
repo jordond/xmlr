@@ -1,10 +1,11 @@
 import { ipcRenderer } from 'electron'
 
 import createLogger from './logger'
+import { RESPONSE } from '../../events'
 
 const TAG = 'IPC'
 
-export function sendMessage(action, args, { wait = true, response, timeout = 0 } = {}) {
+export function sendMessage(action, args, { wait = true, listenFor, timeout = 0 } = {}) {
   const log = createLogger(TAG)
   const promise = new Promise((resolve, reject) => {
     if (!action) {
@@ -16,7 +17,7 @@ export function sendMessage(action, args, { wait = true, response, timeout = 0 }
     if (!wait) {
       return resolve()
     }
-    const responseAction = response || `${action}:response`
+    const responseAction = listenFor || `${action}${RESPONSE}`
     log.debug(`Listening for "${responseAction}"`)
     resolve(recieveMessage(responseAction, timeout))
   })
@@ -24,23 +25,23 @@ export function sendMessage(action, args, { wait = true, response, timeout = 0 }
   return promise
 }
 
-export function recieveMessage(event, timeout = 0) {
+export function recieveMessage(channel, timeout = 0) {
   const log = createLogger(TAG)
   const promise = new Promise((resolve, reject) => {
-    if (!event) {
-      return reject('Recieve: No event was supplied')
+    if (!channel) {
+      return reject('Recieve: No channel was supplied')
     }
 
     const handler = (result, args) => {
-      log.verbose(`[${event}] Message Received`, args)
+      log.verbose(`[${channel}] Message Received`, args)
       return resolve(args)
     }
 
-    ipcRenderer.once(event, handler)
+    ipcRenderer.once(channel, handler)
     if (timeout > 0) {
       setTimeout(() => {
-        ipcRenderer.removeListener(event, handler)
-        return reject(`[${event}] Message response timed out`)
+        ipcRenderer.removeListener(channel, handler)
+        return reject(`[${channel}] Message response timed out`)
       }, timeout)
     }
   })
@@ -48,6 +49,20 @@ export function recieveMessage(event, timeout = 0) {
   return promise
 }
 
-export function subscribe(event, callback = () => {}) {
-  return ipcRenderer.on(event, callback)
+export function subscribe(event, callback) {
+  const handler = (channel, cb = () => {}) => ipcRenderer.on(channel, cb)
+
+  let channel
+  const object = {
+    to: (c) => {
+      channel = c
+      return object
+    },
+    with: cb => handler(channel, cb)
+  }
+
+  if (event && callback) {
+    return handler(event, callback)
+  }
+  return object
 }

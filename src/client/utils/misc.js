@@ -1,6 +1,17 @@
 import { dirname } from 'path'
 import { platform } from 'os'
 
+/**
+ * Take a filepath as a string, and return only a few parent directories
+ * ex:
+ * (path, -1) => /path/to/file/file.txt -> /path/to/file
+ * (path, 0) => /path/to/file/file.txt -> file.txt
+ * (path, 2) => /path/to/file/file.txt -> to/file/file.txt
+ *
+ * @param {String} path - Path to manipulate
+ * @param {Int} [depth=-1] - How many parent folders to keep, -1 disables
+ * @returns The filename with the set number of parent directories
+ */
 export function splitPath(path, depth = -1) {
   if (depth === -1) {
     return dirname(path)
@@ -10,10 +21,23 @@ export function splitPath(path, depth = -1) {
   return folders.slice(folders.length - (depth + 1), folders.length).join(separator)
 }
 
+/**
+ * Remove all underscores and trailing white space from a string
+ *
+ * @param {String} string - String to clean
+ * @returns A string without underscores or trailing white space
+ */
 export function cleanUnderscoresAndTrim(string) {
   return string.replace(/_/g, ' ').trim()
 }
 
+/**
+ * Find the last word in a string
+ *
+ * @param {String} string - String to get last word from
+ * @param {boolean} [checkForNumberPrefix=true] - Check if the last word is a digit, if so choose the next word
+ * @returns The last word found in the string
+ */
 export function getLastWord(string, checkForNumberPrefix = true) {
   const words = string.split(' ')
   let offset = isNaN(words[words.length - 2]) ? 1 : 2
@@ -25,6 +49,7 @@ export function getLastWord(string, checkForNumberPrefix = true) {
 
 /**
  * Take an array of strings and find a common prefix for them
+ *
  * @param {string[]} [strings=[]] - Strings to check
  * @returns String - Common prefix from the strings
  */

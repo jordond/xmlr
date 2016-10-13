@@ -1,5 +1,5 @@
 import { sendMessage } from '../utils/ipc-wrapper'
-import { Events } from '../../files/open'
+import Events from '../../events'
 
 const defaultOptions = {
   filters: [{
@@ -31,4 +31,9 @@ export function selectXMLFolder() {
     folder: true
   }
   return sendMessage(Events.ACTION_OPEN_FOLDER, options)
+}
+
+export function switchXML(targetPath, selectedPath) {
+  // TODO eventually add functionality to play the swf?
+  return sendMessage(Events.ACTION_SWITCH_XML, { targetPath, selectedPath })
 }

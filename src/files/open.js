@@ -4,19 +4,13 @@ import { extname, basename, resolve, join } from 'path'
 import { ipcMain, dialog } from 'electron'
 import { promisify } from 'bluebird'
 
+import Events from '../events'
 import { getIpcInstance as log } from '../logger'
 
 const readdirAsync = promisify(readdir)
 
 const DEFAULT_TITLE = 'Select file(s)'
 const DEFAULT_FILTERS = { name: 'All Files', extensions: ['*'] }
-
-export const Events = {
-  RESPONSE: ':response',
-  ACTION_OPEN_FILE: 'action:open:file',
-  ACTION_OPEN_FOLDER: 'action:open:folder',
-  RESPONSE_OPEN_FILE: 'action:open:file:response'
-}
 
 /**
  * Register all of the file events
@@ -58,6 +52,6 @@ async function findXMLsInFolder(event, folderNames = []) {
       .map(x => resolve(join(folder, x)))
     fileList.push([...xmls])
   }
-  log().debug(`Sending ${Events.ACTION_OPEN_FOLDER}:response`, fileList, 'File:Open')
-  event.sender.send(`${Events.ACTION_OPEN_FOLDER}:response`, fileList)
+  log().debug(`Sending ${Events.RESPONSE_OPEN_FOLDER}`, fileList, 'File:Open')
+  event.sender.send(Events.RESPONSE_OPEN_FOLDER, fileList)
 }

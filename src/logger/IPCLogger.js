@@ -1,4 +1,4 @@
-import { LOG_MESSAGE } from './'
+import { LOG_MESSAGE } from '../events'
 import Console from './console'
 
 export default class IPCLogger extends Console {
@@ -15,37 +15,37 @@ export default class IPCLogger extends Console {
     }
   }
 
-  out(message, data = {}, tag = this.tag) {
+  out(message, data, tag = this.tag) {
     this.send('LOG', message, data, tag)
     return super.out(message, data, true)
   }
 
-  error(message, data = {}, tag = this.tag) {
+  error(message, data, tag = this.tag) {
     this.send('ERROR', message, data, tag)
     return super.error(message, data)
   }
 
-  warning(message, data = {}, tag = this.tag) {
+  warning(message, data, tag = this.tag) {
     this.send('WARN', message, data, tag)
     return super.warning(message, data)
   }
 
-  info(message, data = {}, tag = this.tag) {
+  info(message, data, tag = this.tag) {
     this.send('INFO', message, data, tag)
     return super.info(message, data)
   }
 
-  verbose(message, data = {}, tag = this.tag) {
+  verbose(message, data, tag = this.tag) {
     this.send('VERBOSE', message, data, tag)
     return super.verbose(message, data)
   }
 
-  debug(message, data = {}, tag = this.tag) {
+  debug(message, data, tag = this.tag) {
     this.send('DEBUG', message, data, tag)
     return super.debug(message, data)
   }
 
-  silly(message, data = {}, tag = this.tag) {
+  silly(message, data, tag = this.tag) {
     this.send('SILLY', message, data, tag)
     return super.silly(message, data)
   }

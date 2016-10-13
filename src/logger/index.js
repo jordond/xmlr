@@ -1,11 +1,6 @@
 import Console from './console'
 import IPCLogger from './IPCLogger'
 
-export const CHANNEL_PREFIX = 'log'
-export const LOG_REGISTER = `${CHANNEL_PREFIX}:register`
-export const LOG_MESSAGE = `${CHANNEL_PREFIX}:message`
-export const LOG_OPTIONS = `${LOG_REGISTER}:response`
-
 let ipcLogger
 
 export function initIpc(webContents, tag = 'Main', config = {}) {

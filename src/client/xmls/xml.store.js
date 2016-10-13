@@ -2,9 +2,10 @@ import { dirname } from 'path'
 import { action, observable, computed, autorun } from 'mobx'
 
 import flatten from '../utils/array'
+import createLog from '../utils/logger'
 
 import XMLModel from './xml.model'
-import { selectTargetXml, selectMultipleXMLs, selectXMLFolder } from './xml.service'
+import { selectTargetXml, selectMultipleXMLs, selectXMLFolder, switchXML } from './xml.service'
 
 class XMLStore {
   @observable loading = false
@@ -13,17 +14,30 @@ class XMLStore {
   @observable target = null
   @observable test = {}
   existingFilepaths = []
+  log
 
   constructor() {
+    this.log = createLog('XMLStore')
     autorun(() => {
       // TODO implement, for now just console.log
       // this.bridge.selectedXmlChanged(this.selected)
       if (this.target) {
-        console.log(`Target xml has changed -> ${this.target.filepath}`)
+        this.log.info(`Target xml has changed -> ${this.target.filepath}`)
       }
     })
 
-    autorun(() => console.log('Item selected -> ', this.selected.id))
+    autorun(() => {
+      if (this.selected.id && this.target) {
+        this.log.info(`Item selected -> ${this.selected.id}`)
+        switchXML(this.target.filepath, this.selected.filepath)
+      }
+    })
+
+    autorun(() => {
+      if (this.error && this.error.message) {
+        this.log.error(`Error -> ${this.error.message}`, this.error)
+      }
+    })
   }
 
   listAll() {
@@ -65,7 +79,6 @@ class XMLStore {
       this.loading = false
     } catch (error) {
       this.resetLoading(error)
-      console.error('loadfiles failed', error)
     }
   }
 
@@ -79,7 +92,6 @@ class XMLStore {
       this.loading = false
     } catch (error) {
       this.resetLoading(error)
-      console.error('loadFolder failed', error)
     }
   }
 
@@ -108,7 +120,11 @@ class XMLStore {
 
   @action
   setSelected(item) {
-    this.listAll().forEach(x => (x.selected = item.id === x.id))
+    if (this.target) {
+      this.listAll().forEach(x => (x.selected = item.id === x.id))
+    } else {
+      this.log.warning(`Can't select [${item.id}] because target is not chosen`)
+    }
   }
 
   @action
