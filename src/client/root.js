@@ -5,6 +5,7 @@ import { Provider } from 'mobx-react'
 import createRoutes from './routes'
 import { store as XmlStore } from './xmls'
 
+// TODO create class to save state of stores to file?
 const xmlStore = new XmlStore()
 const routes = createRoutes()
 

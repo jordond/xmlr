@@ -1,5 +1,5 @@
 import { sendMessage } from '../utils/ipc-wrapper'
-import Events from '../../events'
+import * as Events from '../../events'
 
 const defaultOptions = {
   filters: [{

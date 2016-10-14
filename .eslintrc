@@ -14,7 +14,7 @@
     "babel/no-await-in-loop": 1,
     "consistent-return": 0,
     "comma-dangle": 0,
-    "no-use-before-define": 0,
+    "no-use-before-define": [2, { "classes": false, "functions": false }],
     "import/no-unresolved": [2, { "ignore": ["electron"] }],
     "react/jsx-no-bind": 1,
     "react/prefer-stateless-function": 0,
@@ -28,8 +28,7 @@
     "class-methods-use-this": [2, { "exceptMethods": ["render"] }],
     "max-len": [0, { "ignoreComments": true, "ignoreStrings": true }],
     "jsx-a11y/no-static-element-interactions": 0,
-    "no-param-reassign": 0,
-    "import/no-named-as-default-member": 0
+    "no-param-reassign": 0
   },
   "plugins": [
     "babel",

@@ -1,4 +1,4 @@
-const window = {
+const darwin = {
   label: 'Window',
   submenu: [{
     label: 'Minimize',
@@ -16,4 +16,4 @@ const window = {
   }]
 }
 
-export default window
+export default darwin

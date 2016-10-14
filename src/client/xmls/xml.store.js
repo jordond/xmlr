@@ -139,6 +139,16 @@ class XMLStore {
     this.error = error
   }
 
+  /**
+   * DEBUG Function
+   * TODO: Delete
+   *
+   * Populates the fields for testing
+   */
+  debug() {
+    console.log('debug for now', this)
+  }
+
 }
 
 export default XMLStore

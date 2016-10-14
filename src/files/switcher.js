@@ -13,16 +13,25 @@ const copyAsync = promisify(copy)
 
 const DEFAULT_BACKUP_NAME = '_backup'
 
+/**
+ * Register the ipc events
+ */
 export default function registerEvents() {
   log().debug('Registering Switcher events...')
 
   ipcMain.on(ACTION_SWITCH_XML, onSwitchXML)
 }
 
+/**
+ * Check to see if a file or directory exists
+ * await stat() will throw an error if file doesn't exist.  In some cases we need a boolean not an exception
+ *
+ * @param {String} path - Path to the file or directory
+ * @returns {Boolean} - True if exists, false if not
+ */
 async function fileExists(path) {
   try {
-    const exists = await statAsync(path)
-    return exists
+    return await statAsync(path)
   } catch (error) {
     return false
   }

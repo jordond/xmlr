@@ -38,6 +38,13 @@ export default class TargetXmlForm extends Component {
         <button onClick={this.handleLoadFiles} disabled={disabled}>Load Files</button>
         <button onClick={this.handleLoadFolder} disabled={disabled}>Load Folder</button>
         <button onClick={this.handleClear} disabled={loading}>Clear</button>
+        {(() => {
+          if (process.env.NODE_ENV === 'development') {
+            // TODO, finish the settings saving and loading, and make this button load this.state.
+            // In debug mode, auto save state, if flag is true
+            return <button onClick={() => this.props.xmlStore.debug()}>DEBUG-LOAD</button>
+          }
+        })()}
       </div>
     )
   }
