@@ -1,12 +1,14 @@
 import moment from 'moment'
 
+/**
+ * @const {String[]} LOG_LEVELS - Available levels for logging
+ */
 const LOG_LEVELS = ['ERROR', 'WARN', 'INFO', 'VERBOSE', 'DEBUG', 'SILLY']
 
-/* eslint no-confusing-arrow: [0] */
-function levelsLength(arr = []) {
-  const longest = arr.reduce((l, c) => c.length > l.length ? c : l, '')
-  return longest.length
-}
+/**
+ * @const {Number} LONGEST_LENGTH - Length of the longest level, used for keeping consistant output
+ */
+const LONGEST_LENGTH = 7
 
 export default class Base {
   constructor(tag = 'App', options = {}) {
@@ -15,7 +17,7 @@ export default class Base {
       default: Base.validLevel(options.default) ? options.default : 'INFO',
       level: Base.validLevel(options.level) ? options.level : 'INFO',
       short: options.short || false,
-      maxLength: levelsLength(LOG_LEVELS)
+      maxLength: LONGEST_LENGTH
     })
   }
 

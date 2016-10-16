@@ -38,7 +38,15 @@ export default function registerFileOpenEvents() {
  * @param {String[]}  [filters[].extensions] - Extensions to allow
  * @return {String[]} List of xml file paths
  */
-export function onOpenFile(event, { folder = false, multi = false, title = DEFAULT_TITLE, path = '', filters = DEFAULT_FILTERS } = {}) {
+export function onOpenFile(event, options = {}) {
+  const {
+    folder = false,
+    multi = false,
+    path = '',
+    title = DEFAULT_TITLE,
+    filters = DEFAULT_FILTERS
+  } = options
+
   const properties = ['openFile']
   if (multi) {
     properties.push('multiSelections')

@@ -2,6 +2,9 @@ import { LOG_MESSAGE } from '../events'
 import Console from './console'
 
 export default class IPCLogger extends Console {
+  /**
+   * @static {Object} webContents - Instance of the Renderer process
+   */
   webContents
 
   constructor(webContents, tag, options = {}) {

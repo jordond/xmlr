@@ -1,5 +1,7 @@
 /**
  * Base event paths
+ * @const {String} ACTION - Prefix for all of the events
+ * @const {String} RESPONSE - Suffix for the events
  */
 export const ACTION = 'action:'
 export const RESPONSE = ':response'
@@ -24,6 +26,8 @@ export const RESPONSE_SWITCH_XML = `${ACTION_SWITCH_XML}${RESPONSE}`
 
 /**
  * Log related events
+ *
+ * TODO : remove need to register log options, just get that info from electron-settings
  *
  * @see client/utils/logger#register | For Register, and options implementation
  * @see main.js#onReady | For options implementation
