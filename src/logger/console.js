@@ -1,10 +1,37 @@
 import Base from './base'
 
+/**
+ * Console logging class
+ *
+ * Set as a replacement to console.log.
+ *
+ * @class Console
+ * @extends {Base}
+ */
 export default class Console extends Base {
+
+  /**
+   * Creates a Console logger
+   *
+   * @param {String} tag - Tag of the calling class
+   * @param {Object} [options] - Override logger options
+   * @returns
+   */
   constructor(tag, options = {}) {
     super(tag, options)
   }
 
+  /**
+   * Output the message to the console
+   * Check if current message is allowed to log, then construct the message and output to log
+   *
+   * @param {Object}  item - Contains all information required to output to log
+   * @param {String}  item.level - Log level of the message
+   * @param {String}  item.message - Message to log
+   * @param {any}     [item.data=''] - Other data to output
+   * @param {Boolean} [force=false] - Ignore the log level check and always output
+   * @returns {Console} Instance of itself, so that log messages can be chained
+   */
   toConsole(item, force = false) {
     if (super.shouldLog(item.level) || force) {
       const header = this.formatHeader(item.level, this.tag)
@@ -23,9 +50,18 @@ export default class Console extends Base {
     return this
   }
 
+  /**
+   * Always output to log
+   * No matter the current set log level, this will always output
+   *
+   * @param {String} message - Message to log
+   * @param {Object} [data={}] - Other data to output
+   * @param {Boolean} [force=true] - Whether or not to force output (Should always be true)
+   * @returns
+   */
   out(message, data = {}, force = true) {
     const item = { level: 'LOG', message, data }
-    return this.toConsole(item, null, force)
+    return this.toConsole(item, force)
   }
 
   /**

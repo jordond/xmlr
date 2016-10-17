@@ -4,17 +4,14 @@ import { Route, IndexRoute, Redirect } from 'react-router'
 import Shell from './shell'
 import { XMLPage } from './xmls'
 
+/**
+ * Creates the routes elements
+ *
+ * @returns {Object} All routes for the application
+ */
 export default () => (
   <Route path="/" component={Shell}>
     <IndexRoute component={XMLPage} />
     <Redirect from="*" to="/" />
   </Route>
 )
-
-// export default (
-//   <Route path="/" component={Shell}>
-//     <IndexRoute component={GithubPage} />
-//     <Route path="clock" component={ClockPage} />
-//     <Redirect from="*" to="/" />
-//   </Route>
-// )

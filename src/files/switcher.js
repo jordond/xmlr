@@ -8,9 +8,15 @@ import { ipcMain } from 'electron'
 import { getIpcInstance as log } from '../logger'
 import { ACTION_SWITCH_XML, generateResponse } from '../events'
 
+/**
+ * Convert from callback structure to promises to use async/await syntax
+ */
 const statAsync = promisify(stat)
 const copyAsync = promisify(copy)
 
+/**
+ * @constant {String} DEFAULT_BACKUP_NAME - Default string to add on to xml file when switching it
+ */
 const DEFAULT_BACKUP_NAME = '_backup'
 
 /**

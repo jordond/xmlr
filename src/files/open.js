@@ -7,10 +7,21 @@ import { promisify } from 'bluebird'
 import * as Events from '../events'
 import { getIpcInstance as log } from '../logger'
 
+/**
+ * Convert from callback structure to promises to use async/await syntax
+ */
 const readdirAsync = promisify(readdir)
 
+/**
+ * @constant {String} DEFAULT_TITLE - Default title to use for dialog window
+ */
 const DEFAULT_TITLE = 'Select file(s)'
-const DEFAULT_FILTERS = { name: 'All Files', extensions: ['*'] }
+
+/**
+ * @constant {Object[]} DEFAULT_FILTERS - Default filters to use for dialog window
+ * @see Open#onOpenFile | For further documentation
+ */
+const DEFAULT_FILTERS = [{ name: 'All Files', extensions: ['*'] }]
 
 /**
  * Register all of the file events

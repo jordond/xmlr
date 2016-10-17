@@ -8,4 +8,7 @@ import Root from './root'
 
 registerLogger()
 
+/**
+ * Bootstrap the entire application
+ */
 render(<Root />, document.getElementById('root'))

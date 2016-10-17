@@ -9,7 +9,13 @@ import { store as XmlStore } from './xmls'
 const xmlStore = new XmlStore()
 const routes = createRoutes()
 
-export default class Root extends Component {
+/**
+ * Root element of application
+ *
+ * @class Root
+ * @extends {Component}
+ */
+class Root extends Component {
   render() {
     return (
       <Provider xmlStore={xmlStore}>
@@ -20,3 +26,8 @@ export default class Root extends Component {
     )
   }
 }
+
+/**
+ * @exports Root
+ */
+export default Root
