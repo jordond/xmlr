@@ -7,6 +7,12 @@ import createLog from '../utils/logger'
 import XMLModel from './xml.model'
 import { selectTargetXml, selectMultipleXMLs, selectXMLFolder, switchXML } from './xml.service'
 
+/**
+ * XMLStore Class
+ * Central location for keeping track of all the data relating to the XMLs
+ *
+ * @class XMLStore
+ */
 class XMLStore {
   @observable loading = false
   @observable error = {}
@@ -16,16 +22,16 @@ class XMLStore {
   existingFilepaths = []
   log
 
+  /**
+   * Creates a new XMLStore instance
+   * Create a new logger object and register the autorun functions
+   */
   constructor() {
     this.log = createLog('XMLStore')
-    autorun(() => {
-      // TODO implement, for now just console.log
-      // this.bridge.selectedXmlChanged(this.selected)
-      if (this.target) {
-        this.log.info(`Target xml has changed -> ${this.target.filepath}`)
-      }
-    })
 
+    /**
+     * Run whenever a new XML is selected
+     */
     autorun(() => {
       if (this.selected.id && this.target) {
         this.log.info(`Item selected -> ${this.selected.id}`)
@@ -33,6 +39,9 @@ class XMLStore {
       }
     })
 
+    /**
+     * Run whenever an error message has been caught
+     */
     autorun(() => {
       if (this.error && this.error.message) {
         this.log.error(`Error -> ${this.error.message}`, this.error)
@@ -40,6 +49,10 @@ class XMLStore {
     })
   }
 
+  /**
+   * Creates a flat list of all the currently loaded XML files
+   * @returns {Object<XmlModel>[]} A list of XMLModel objects
+   */
   listAll() {
     if (this.list.length === 0) {
       return []
@@ -48,11 +61,19 @@ class XMLStore {
     return flatten(list)
   }
 
+  /**
+   * Gets the currently selected XMLModel from the list of all models
+   * @returns {Object<XMLModel} Selected xml
+   */
   @computed
   get selected() {
     return this.listAll().find(x => x.selected) || {}
   }
 
+  /**
+   * Select a target xml to be the base for switching xmls
+   * @deprecated Soon to be dropped in favour of selecting a root folder instead of a file
+   */
   @action
   async selectTarget() {
     this.loading = true
@@ -71,6 +92,9 @@ class XMLStore {
     }
   }
 
+  /**
+   * Open a file dialog and select one or more xml files to add to the list
+   */
   async loadFiles() {
     this.loading = true
     try {
@@ -82,10 +106,16 @@ class XMLStore {
     }
   }
 
+  /**
+   * Load all xml files in a selected folder(s)
+   * Opens a dialog window to choose folders
+   */
   async loadFolder() {
     this.loading = true
     try {
       const folderList = await selectXMLFolder()
+
+      // For each folder chosen, load the xmls
       for (const filenames of folderList) {
         this.loadXmls(filenames)
       }
@@ -95,29 +125,48 @@ class XMLStore {
     }
   }
 
+  /**
+   * Takes a list of xml files and creates XMLModel instances
+   * If the filepath already exists in the global array then it will be ignored
+   *
+   * @param {String[]} filenames - List of xml files to create
+   */
   @action
   loadXmls(filenames = []) {
     if (filenames && filenames.length > 0) {
+      // Filter out existing files, and sort the remaining
       const uniqueFiles = filenames
         .filter(x => !this.existingFilepaths.includes(x))
         .sort((l, r) => l.length - r.length)
 
+      // Only continue if there are some new files to create
       if (uniqueFiles.length > 0) {
+        // Keep track of filepaths that are loaded
         this.existingFilepaths.push(...uniqueFiles)
 
         // Create the Xml models
         const xmls = uniqueFiles.map(x => new XMLModel(this, x))
 
+        // Check to see if the root folder path already exists
         const existingIndex = this.list.findIndex(x => x.root === dirname(uniqueFiles[0]))
+
+        // If the root folder doesn't exist, then create a new root object, and add the xml instances
         if (existingIndex === -1) {
           this.list.push({ root: dirname(uniqueFiles[0]), files: xmls })
         } else {
+          // Add the new instances to the existing folder
           this.list[existingIndex].files.push(...xmls)
         }
       }
     }
   }
 
+  /**
+   * Mark the item as selected
+   * If the target path is not chosen, do not select the xml
+   *
+   * @param {Object<XMLModel} item - Item to select
+   */
   @action
   setSelected(item) {
     if (this.target) {
@@ -127,12 +176,20 @@ class XMLStore {
     }
   }
 
+  /**
+   * Clear the store of all loaded xmls
+   * Also deletes the lookup table of added files
+   */
   @action
   clear() {
     this.list.clear()
     this.existingFilepaths = []
   }
 
+  /**
+   * Resets the loading flag, and the error object
+   * @param {Object} [error=null] - Object containing error information
+   */
   @action
   resetLoading(error = null) {
     this.loading = false
@@ -151,4 +208,7 @@ class XMLStore {
 
 }
 
+/**
+ * @exports XMLStore
+ */
 export default XMLStore

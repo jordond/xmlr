@@ -3,6 +3,13 @@ import { observer } from 'mobx-react'
 
 import styles from './targetXml.css'
 
+/**
+ * TargetXmlForm Component
+ * Renders the buttons and elements needed to choose a target file or directory
+ *
+ * @class TargetXmlForm
+ * @extends {Component}
+ */
 @observer(['xmlStore'])
 class TargetXmlForm extends Component {
 
@@ -15,6 +22,9 @@ class TargetXmlForm extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
 
+  /**
+   * Start the target selection process on click
+   */
   handleClick() {
     const { loading } = this.props.xmlStore
     if (!loading) {
@@ -37,4 +47,7 @@ class TargetXmlForm extends Component {
 
 }
 
+/**
+ * @exports TargetXmlForm
+ */
 export default TargetXmlForm

@@ -3,13 +3,24 @@ import { observer } from 'mobx-react'
 
 import styles from './actions.css'
 
+/**
+ * Actions Component
+ * Render all the elements required to perform actions on the xml list
+ *
+ * @exports Actions
+ * @class Actions
+ * @extends {Component}
+ */
 @observer(['xmlStore'])
-export default class TargetXmlForm extends Component {
+export default class Actions extends Component {
 
   static propTypes = {
     xmlStore: React.PropTypes.any.isRequired
   }
 
+  /**
+   * Bind all of the action listeners to this
+   */
   constructor() {
     super()
     this.handleLoadFiles = this.handleLoadFiles.bind(this)
@@ -17,14 +28,17 @@ export default class TargetXmlForm extends Component {
     this.handleClear = this.handleClear.bind(this)
   }
 
+  // Open the file dialog
   handleLoadFiles() {
     this.props.xmlStore.loadFiles()
   }
 
+  // Opens the folder dialog
   handleLoadFolder() {
     this.props.xmlStore.loadFolder()
   }
 
+  // Clears the xml list of all instances
   handleClear() {
     this.props.xmlStore.clear()
   }

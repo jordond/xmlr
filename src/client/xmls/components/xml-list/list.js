@@ -3,6 +3,13 @@ import { inject, observer } from 'mobx-react'
 
 import ListItem from './list-item'
 
+/**
+ * Renders the list of XMLModel's
+ *
+ * @param {Object} props
+ * @param {Object<XmlStore>} props.xmlStore - Reference to the XML Store
+ * @returns
+ */
 function List({ xmlStore: { list } }) {
   return (
     <ul>
