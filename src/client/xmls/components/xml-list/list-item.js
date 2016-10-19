@@ -12,8 +12,9 @@ import styles from './list-item.css'
  */
 function ListItem({ item }) {
   return (
-    <li className={item.selected ? styles.test : {}} onClick={() => item.setSelected()}>
-      {item.displayName}
+    <li>
+      <span className={item.selected ? styles.test : {}} onClick={() => item.setSelected()}>{item.displayName}</span>
+      <button className={styles.delete} onClick={() => item.destroy()}><i className="fa fa-remove" /></button>
     </li>
   )
 }

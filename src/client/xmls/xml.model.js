@@ -14,6 +14,7 @@ class XMLModel {
   @observable filepath
   @observable isTarget = false
   @observable selected = false
+  @observable hidden = false
   store
   id
 
@@ -67,9 +68,11 @@ class XMLModel {
 
   /**
    * Removes the model from the store
+   * TODO - Broken
    */
   destroy() {
-    this.store.list.remove(this)
+    console.log('inside')
+    this.store.listAll().find(x => x.id === this.id).remove(this)
   }
 
   /**
