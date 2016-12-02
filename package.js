@@ -23,6 +23,7 @@ const shouldUseAsar = argv.asar || argv.a || false
 const shouldBuildAll = argv.all || false
 
 console.log(`shouldUseAsar: ${shouldUseAsar}`)
+console.log(`shouldBuildAll: ${shouldBuildAll}`)
 
 const DEFAULT_OPTS = {
   dir: './',

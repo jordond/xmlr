@@ -47,7 +47,8 @@ export async function register() {
     if (logOptions) {
       log = createLogger(DEFAULT_TAG, logOptions)
       options = logOptions
-      log.debug('Recieved logger options from Main process', logOptions)
+      log.info('Recieved logger options from Main process')
+         .debug('Options:', logOptions)
     }
   } catch (err) {
     log = createLogger('Logger', DEFAULT_OPTIONS)
