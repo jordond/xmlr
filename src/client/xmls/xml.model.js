@@ -71,8 +71,7 @@ class XMLModel {
    * TODO - Broken
    */
   destroy() {
-    console.log('inside')
-    this.store.listAll().find(x => x.id === this.id).remove(this)
+    console.log('Not Implemented', this.id)
   }
 
   /**

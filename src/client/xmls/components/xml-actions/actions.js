@@ -44,8 +44,8 @@ export default class Actions extends Component {
   }
 
   render() {
-    const { loading, target } = this.props.xmlStore
-    const disabled = loading || !target
+    const { loading } = this.props.xmlStore
+    const disabled = loading
     return (
       <div className={styles.test}>
         <div />

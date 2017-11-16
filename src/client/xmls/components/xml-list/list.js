@@ -10,13 +10,15 @@ import ListItem from './list-item'
  * @param {Object<XmlStore>} props.xmlStore - Reference to the XML Store
  * @returns
  */
-function List({ xmlStore: { list } }) {
+function List({ xmlStore: { list, filterText } }) {
   return (
     <ul>
       {
         list.map((item) => {
           const folder = <span>{item.root}</span>
-          const fileItems = item.files.map(file => <ListItem key={file.id} item={file} />)
+          const fileItems = item.files
+            .filter(file => file.filepath.match(new RegExp(filterText, 'i')))
+            .map(file => <ListItem key={file.id} item={file} />)
           return [folder, ...fileItems]
         })
       }

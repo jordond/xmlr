@@ -19,6 +19,7 @@ class XMLStore {
   @observable list = []
   @observable target = null
   @observable test = {}
+  @observable filterText = ''
   existingFilepaths = []
   log
 
@@ -38,6 +39,10 @@ class XMLStore {
         switchXML(this.target.filepath, this.selected.filepath)
       }
     })
+
+    // autorun(() => {
+
+    // })
 
     /**
      * Run whenever an error message has been caught
@@ -68,6 +73,14 @@ class XMLStore {
   @computed
   get selected() {
     return this.listAll().find(x => x.selected) || {}
+  }
+
+  @computed
+  get filteredItems() {
+    if (this.filterText !== '') {
+      return this.listAll().filter(x => x.filepath.indexOf(this.filterText) !== -1)
+    }
+    return this.listAll()
   }
 
   /**

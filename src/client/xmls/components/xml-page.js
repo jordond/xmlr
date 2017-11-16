@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import TargetXmlForm from './targetXml-form/targetXml-form'
+import Filter from './filter'
 import XmlList from './xml-list/list'
 import XmlActions from './xml-actions/actions'
 
@@ -15,6 +16,7 @@ export default class XMLPage extends Component {
     return (
       <div className="XMLPage">
         <TargetXmlForm />
+        <Filter />
         <XmlList />
         <XmlActions />
       </div>
